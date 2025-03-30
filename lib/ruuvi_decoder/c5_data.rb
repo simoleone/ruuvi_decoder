@@ -3,10 +3,10 @@
 module RuuviDecoder
   # Decoder for V5 formatted data.
   # https://docs.ruuvi.com/communication/bluetooth-advertisements/data-format-5-rawv2
-  class V5Data < BaseData
+  class C5Data < BaseData
     MANUFACTURER_ID = 0x0499
-    DATA_LENGTH_BYTES = 24
-    VERSION_TAG = 5
+    DATA_LENGTH_BYTES = 18
+    VERSION_TAG = 0xC5
 
     def self.detect(raw_data)
       raw_data.size == DATA_LENGTH_BYTES && raw_data[0] == VERSION_TAG
@@ -17,7 +17,7 @@ module RuuviDecoder
 
       @mac_address =
         begin
-          bytes = raw_data[18..24]
+          bytes = raw_data[12..17]
           if bytes.all?(0xff)
             nil
           else
@@ -29,13 +29,13 @@ module RuuviDecoder
     def sequence_number
       return @sequence_number if defined?(@sequence_number)
 
-      @sequence_number = decode_16_bits_unsigned(raw_data[16..17], multiplier: 1, invalid: 65_535)
+      @sequence_number = decode_16_bits_unsigned(raw_data[10..11], multiplier: 1, invalid: 65_535)
     end
 
     def movement_counter
       return @movement_counter if defined?(@movement_counter)
 
-      @movement_counter = decode_16_bits_unsigned([0, raw_data[15]], multiplier: 1, invalid: 255)
+      @movement_counter = decode_16_bits_unsigned([0, raw_data[9]], multiplier: 1, invalid: 255)
     end
 
     def tx_power_dbm
@@ -49,24 +49,6 @@ module RuuviDecoder
 
       @battery_v = decode_bitmasked_unsigned(raw_power_info >> 5, 0x07FF, offset: 1600, multiplier: 0.001,
                                                                           invalid: 2047)
-    end
-
-    def acceleration_x_g
-      return @acceleration_x_g if defined?(@acceleration_x_g)
-
-      @acceleration_x_g = decode_16_bits_signed(raw_data[7..8], invalid: 0x8000, multiplier: 0.001)
-    end
-
-    def acceleration_y_g
-      return @acceleration_y_g if defined?(@acceleration_y_g)
-
-      @acceleration_y_g = decode_16_bits_signed(raw_data[9..10], invalid: 0x8000, multiplier: 0.001)
-    end
-
-    def acceleration_z_g
-      return @acceleration_z_g if defined?(@acceleration_z_g)
-
-      @acceleration_z_g = decode_16_bits_signed(raw_data[11..12], invalid: 0x8000, multiplier: 0.001)
     end
 
     def pressure_hpa
@@ -93,9 +75,6 @@ module RuuviDecoder
            temperature: #{temperature_c} C,
            humidity: #{humidity_pct} %,
            pressure: #{pressure_hpa} hPa,
-           acceleration_x: #{acceleration_x_g} G,
-           acceleration_y: #{acceleration_y_g} G,
-           acceleration_z: #{acceleration_z_g} G,
            battery: #{battery_v} V,
            tx_power: #{tx_power_dbm} dBm,
            movement_counter: #{movement_counter},
@@ -108,7 +87,7 @@ module RuuviDecoder
     private
 
     def raw_power_info
-      @raw_power_info = decode_16_bits_unsigned(raw_data[13..14])
+      @raw_power_info = decode_16_bits_unsigned(raw_data[7..8])
     end
   end
 end
