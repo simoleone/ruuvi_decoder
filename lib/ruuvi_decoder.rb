@@ -4,6 +4,7 @@ require_relative 'ruuvi_decoder/version'
 require_relative 'ruuvi_decoder/base_data'
 require_relative 'ruuvi_decoder/c5_data'
 require_relative 'ruuvi_decoder/v5_data'
+require_relative 'ruuvi_decoder/v8_data'
 
 # Decoders for various binary data formats emitted by Ruuvi bluetooth sensors.
 # Use classes directly or the static decode method to automatically select one based
@@ -13,8 +14,14 @@ module RuuviDecoder
     raw_data = normalize_raw_data(raw_data)
 
     # TODO(simo): implement more formats :)
-    decoder_class = [V5Data, C5Data].find { |data_format| data_format.detect(raw_data) }
+    decoder_class = [
+      V5Data,
+      C5Data,
+      V8Data
+    ].find { |data_format| data_format.detect(raw_data) }
     raise 'no decoder found' if decoder_class.nil?
+
+    raise 'instantiate V8Data directly, with tag id and password' if decoder_class == V8Data
 
     decoder_class.new(raw_data)
   end

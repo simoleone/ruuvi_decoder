@@ -32,6 +32,21 @@ RSpec.describe RuuviDecoder do
       end
     end
 
+    context 'when v8 data' do
+      let(:value) do
+        [
+          0x08,
+          0x99, 0xF9, 0xF2, 0x64, 0x02, 0xB8, 0x1F, 0xE8,
+          0x82, 0x69, 0x08, 0xCE, 0xD2, 0xC2, 0x67, 0x88,
+          0x3F, 0xCB, 0xB8, 0x33, 0x4C, 0x88, 0x4F
+        ]
+      end
+
+      it do
+        expect { decode }.to raise_error(RuntimeError, 'instantiate V8Data directly, with tag id and password')
+      end
+    end
+
     context 'when unknown data' do
       let(:value) do
         "\x01\x02\03".b

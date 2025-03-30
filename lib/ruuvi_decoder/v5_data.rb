@@ -6,7 +6,7 @@ module RuuviDecoder
   class V5Data < BaseData
     MANUFACTURER_ID = 0x0499
     DATA_LENGTH_BYTES = 24
-    VERSION_TAG = 5
+    VERSION_TAG = 0x05
 
     def self.detect(raw_data)
       raw_data.size == DATA_LENGTH_BYTES && raw_data[0] == VERSION_TAG
