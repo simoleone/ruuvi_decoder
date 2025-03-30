@@ -2,6 +2,7 @@
 
 require_relative 'ruuvi_decoder/version'
 require_relative 'ruuvi_decoder/base_data'
+require_relative 'ruuvi_decoder/v3_data'
 require_relative 'ruuvi_decoder/c5_data'
 require_relative 'ruuvi_decoder/v5_data'
 require_relative 'ruuvi_decoder/v8_data'
@@ -13,8 +14,8 @@ module RuuviDecoder
   def self.decode(raw_data)
     raw_data = normalize_raw_data(raw_data)
 
-    # TODO(simo): implement more formats :)
     decoder_class = [
+      V3Data,
       V5Data,
       C5Data,
       V8Data

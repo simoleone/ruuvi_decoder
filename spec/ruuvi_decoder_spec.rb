@@ -47,6 +47,14 @@ RSpec.describe RuuviDecoder do
       end
     end
 
+    context 'when v3 data' do
+      let(:value) { [0x03, 0x29, 0x1A, 0x1E, 0xCE, 0x1E, 0xFC, 0x18, 0xF9, 0x42, 0x02, 0xCA, 0x0B, 0x53] }
+
+      it do
+        expect(decode).to be_a(RuuviDecoder::V3Data)
+      end
+    end
+
     context 'when unknown data' do
       let(:value) do
         "\x01\x02\03".b
