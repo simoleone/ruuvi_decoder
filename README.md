@@ -1,4 +1,7 @@
 # RuuviDecoder
+[![Gem Version](https://badge.fury.io/rb/ruuvi_decoder.svg?icon=si%3Arubygems)](https://badge.fury.io/rb/ruuvi_decoder)
+![Build](https://github.com/simoleone/ruuvi_decoder/actions/workflows/main.yml/badge.svg)
+
 Decode data from Ruuvi sensors. 
 
 ## Installation
@@ -30,7 +33,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/ruuvi_decoder. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/ruuvi_decoder/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/simoleone/ruuvi_decoder. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/simoleone/ruuvi_decoder/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 
